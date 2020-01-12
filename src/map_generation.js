@@ -35,10 +35,15 @@ function getRandomGroundCell(xmax, ymax){
     while(!isGround(cell)){
         cell = [int(random(xmax)), int(random(ymax))];
     }
-    return new Node(cell[0], cell[1]);
+    return [cell[0], cell[1]];
 }
 
 function isGround(cell){
     var coord = cellToCoordinate([cell[0], cell[1]], {'type':'tuple'});
     return compareArrays(get(coord[0], coord[1]), [GROUND, GROUND, GROUND, 255]); 
+}
+
+function isMountain(cell){
+    var coord = cellToCoordinate([cell[0], cell[1]], {'type':'tuple'});
+    return compareArrays(get(coord[0], coord[1]), [MOUNTAIN, MOUNTAIN, MOUNTAIN, 255]); 
 }

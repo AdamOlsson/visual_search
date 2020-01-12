@@ -19,8 +19,8 @@ function setup(){
     start_node = getRandomGroundCell(NCOLS, NROWS);
     end_node = getRandomGroundCell(NCOLS, NROWS);
 
-    drawEllipse([start_node.x, start_node.y], CELL_WIDTH, color(0,255,0));
-    drawEllipse([end_node.x, end_node.y], CELL_WIDTH, color(0,0,255));
+    drawEllipse([start_node[0], start_node[1]], CELL_WIDTH, color(0,255,0));
+    drawEllipse([end_node[0], end_node[1]], CELL_WIDTH, color(0,0,255));
 
     search = new aStar(start_node , end_node);
 
