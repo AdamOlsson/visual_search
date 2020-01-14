@@ -1,40 +1,59 @@
 
 function aStar(start, end){
-    this.came_from = [];
     this.open_list = [];
     this.start = new Node(start[0], start[1]);
     this.end = new Node(end[0], end[1]);
+
+    this.hasVisited = new Array(NCOLS*NROWS); // A boolean array keeping track of what nodes that are visited
 
     // Initiate gScore and fScore for start node
     this.start.gScore = 0;
     this.start.fScore = heuristic(this.start, this.end);
 
     this.open_list.push(this.start);
+    this.hasVisited[cellToIndex(this.start.x, this.start.y)] = true;
 
     this.step = function(){
+
+        if(compareArrays(this.open_list, [])){
+            return undefined;
+        }
+
         current = this.open_list.pop() // Find element with lowest fScore
         if(current.x == this.end.x && current.y == this.end.y){
             // Complete!
+            console.log("END");
             this.open_list.push(current); // push final step back
-            return 0; // TODO
+            return this.end;
         }
 
         var ns = getNeighbours(current);
         for(var n = 0; n < ns.length; n++){
             var neighbour = ns[n];
-            var total_distance = current.gScore + distance(current, neighbour); // Distance from start to neighbouring node
-            if(total_distance < neighbour.gScore){
-                this.came_from.push(current);
-                neighbour.gScore = total_distance;
+            var tentative_gScore = current.gScore + distance(current, neighbour); // Distance from start to neighbouring node
+            if(tentative_gScore < neighbour.gScore){
+                neighbour.previous = current;
+                neighbour.gScore = tentative_gScore;
                 neighbour.fScore = neighbour.gScore + heuristic(neighbour, this.end);
-                // if(neighbour not in this.open_list ) {
-                //     // sorted insert  of neighbour into this.open_list with lowest fScore at end
-                // }
-            }
-        }
 
+                var index = cellToIndex(neighbour.x, neighbour.y);
+                if(this.hasVisited[index] != true){
+                    this.hasVisited[index] = true;
+                    this.open_list = insertSortedFScore(neighbour, this.open_list);
+                }
+            }
+            // console.log(this.open_list.length);
+        }
         return this.open_list[this.open_list.length -1]; // return node with lowest fScore
     }
+}
+
+function includesNode_prime(node, list){
+
+}
+
+function cellToIndex(x,y){
+    return x + y*NROWS;
 }
 
 /**
@@ -71,7 +90,7 @@ function getNeighbours(node){
 
             if( 0 < tx && tx < NCOLS && 0 < ty && ty < NROWS){
                 if(!(i == 0 && j == 0)){
-                    n.push({ x: tx, y: ty, gScore:0, fScore:0 })
+                    n.push(new Node(tx,ty));
                 }
                 
             }

@@ -5,6 +5,10 @@ function Node(x, y) {
     this.fScore = Infinity;
     this.gScore = Infinity;
 
+    this.previous = undefined;
+
+    this.neighbours = [];
+
     // this.updateFScore = function(heuristicScore) {
     //     this.fScore = this.gScore + heuristicScore;
     // } 

@@ -15,8 +15,17 @@ function cellToCoordinate(coord, type){
     return [x*CELL_WIDTH + CELL_WIDTH/2, y*CELL_WIDTH + CELL_WIDTH/2];
 }
 
-function insertSortedFScore(node, list){
+function includesNode(node, list){
+    for(var i = 0; i < list.length; i++){
+        if(node.x == list[i].x && node.y == list[i].y){
+            return true;
+        }
+    }
+    return false;
+}
 
+//TODO: make binary search
+function insertSortedFScore(node, list){
     for(var i = 0; i < list.length; i++){
         if(list[i].fScore < node.fScore){
             list.splice(i, 0, node);

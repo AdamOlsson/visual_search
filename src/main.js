@@ -6,6 +6,8 @@ var THRESH = 0.51; // between 0 and 1
 var search;
 var start_node, end_node, current_node;
 
+var counter = 0;
+
 function setup(){
     var window_width = 1000;
     var window_height = 500;
@@ -22,15 +24,25 @@ function setup(){
     drawEllipse([start_node[0], start_node[1]], CELL_WIDTH, color(0,255,0));
     drawEllipse([end_node[0], end_node[1]], CELL_WIDTH, color(0,0,255));
 
+    // Send in graph
     search = new aStar(start_node , end_node);
 
-    frameRate(10);    
+    frameRate(15);    
 }
 
 
 function draw(){
+    var node = search.step();
 
-    search.step();
-    noLoop();
+    if(node == undefined){
+        console.log("NO PATH FOUND");
+        noLoop();
+    }else if(node.x == end_node[0] && node.y == end_node[1]){
+        console.log("END FOUND");
+        noLoop();
+    }
 
+    drawEllipse([node.x, node.y], CELL_WIDTH, color(146,220,247));
+
+    counter += 1;
 }
