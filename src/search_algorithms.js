@@ -1,8 +1,8 @@
 
 function aStar(start, end){
     this.open_list = [];
-    this.start = new Node(start[0], start[1]);
-    this.end = new Node(end[0], end[1]);
+    this.start = start;
+    this.end = end;
 
     this.hasVisited = new Array(NCOLS*NROWS); // A boolean array keeping track of what nodes that are visited
 
@@ -22,7 +22,6 @@ function aStar(start, end){
         current = this.open_list.pop() // Find element with lowest fScore
         if(current.x == this.end.x && current.y == this.end.y){
             // Complete!
-            console.log("END");
             this.open_list.push(current); // push final step back
             return this.end;
         }
@@ -42,7 +41,6 @@ function aStar(start, end){
                     this.open_list = insertSortedFScore(neighbour, this.open_list);
                 }
             }
-            // console.log(this.open_list.length);
         }
         return this.open_list[this.open_list.length -1]; // return node with lowest fScore
     }
