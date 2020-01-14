@@ -1,6 +1,9 @@
 
 function aStar(start, end){
+
     this.open_list = [];
+    
+    this.min_f_score_index;
     this.start = start;
     this.end = end;
 
@@ -14,6 +17,8 @@ function aStar(start, end){
     this.f_score[[this.start.x ,this.start.y]] = heuristic(this.start, this.end);
 
     this.open_list.push(this.start);
+    this.min_f_score_index = 0;
+
     this.hasVisited[cellToIndex(this.start.x, this.start.y)] = true;
 
     this.step = function(){
@@ -69,45 +74,11 @@ function cellToIndex(x,y){
     return x + y*NROWS;
 }
 
-/**
- * Currently only handles distances to neighbours.
- * @param {Node} from 
- * @param {Node} to 
- */
 function distance(from, to){
-    if(isMountain([to.x, to.y])){
-        return Infinity;
-    }
     return 1;
 }
-
 
 function heuristic(n1, n2){
     return pythagoras(n1, n2);
 }
 
-/**
- * Returns an array of neighbouring nodes of type Node.
- * @param {Node} node, the node whose neighbours are returned.
- */
-function getNeighbours(node){
-    var n = [];
-    var tx, ty;
-
-    var MOUNTAIN_CELL = [0, 0, 0, MOUNTAIN]
-
-    for(i = -1; i < 2; i++){
-        for(j = -1; j < 2; j++){
-            tx = node.x + i;
-            ty = node.y + j;
-
-            if( 0 < tx && tx < NCOLS && 0 < ty && ty < NROWS){
-                if(!(i == 0 && j == 0)){
-                    n.push(new Node(tx,ty));
-                }
-                
-            }
-        }   
-    }
-    return n;
-}

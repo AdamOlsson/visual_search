@@ -15,16 +15,6 @@ function cellToCoordinate(coord, type){
     return [x*CELL_WIDTH + CELL_WIDTH/2, y*CELL_WIDTH + CELL_WIDTH/2];
 }
 
-function includesNode(node, list){
-    for(var i = 0; i < list.length; i++){
-        if(node.x == list[i].x && node.y == list[i].y){
-            return true;
-        }
-    }
-    return false;
-}
-
-
 function compareArrays(a1, a2){
     if(a1.length != a2.length){
         return false;

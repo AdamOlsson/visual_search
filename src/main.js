@@ -28,7 +28,7 @@ function setup(){
 
     search = new aStar(start_node , end_node);
 
-    frameRate(15);    
+    frameRate(30);    
 }
 
 
