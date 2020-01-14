@@ -24,17 +24,6 @@ function includesNode(node, list){
     return false;
 }
 
-//TODO: make binary search
-function insertSortedFScore(node, list){
-    for(var i = 0; i < list.length; i++){
-        if(list[i].fScore < node.fScore){
-            list.splice(i, 0, node);
-            return list;
-        }
-    }
-    list.push(node);
-    return list;
-}
 
 function compareArrays(a1, a2){
     if(a1.length != a2.length){
