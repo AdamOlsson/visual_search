@@ -33,13 +33,16 @@ function World(ncol, nrow){
 
     this.addAndConnect = function(x,y){
         var node = new Node(x,y);
+        if(y > 2){
+            var dum = 0;
+        }
         this._graph[x + y*this.ncol] = node;
 
-        var dxdy = [[-1,0], [-1,1],[0.1],[1,1]]; // neighbouring node indices to connect as neighbours
+        var dxdy = [[-1,0], [-1,-1],[0,-1],[1,-1]]; // neighbouring node indices to connect as neighbours
 
         for(var i = 0; i < dxdy.length; i++){
-            var index = (node.x + dxdy[i][0]) + (node.y+dxdy[i][0])*this.ncol;
-            if(index < 0 || this._graph[index] == undefined){
+            var index = (node.x + dxdy[i][0]) + (node.y+dxdy[i][1])*this.ncol;
+            if(node.x + dxdy[i][0] < 0 || node.y+dxdy[i][1] < 0 || index < 0 || this._graph[index] == undefined){
                 continue;
             }else{
                 var neighbour = this._graph[index];

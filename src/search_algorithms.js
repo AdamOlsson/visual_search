@@ -26,7 +26,7 @@ function aStar(start, end){
             return this.end;
         }
 
-        var ns = getNeighbours(current);
+        var ns = current.neighbours;
         for(var n = 0; n < ns.length; n++){
             var neighbour = ns[n];
             var tentative_gScore = current.gScore + distance(current, neighbour); // Distance from start to neighbouring node
