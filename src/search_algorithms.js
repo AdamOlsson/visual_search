@@ -3,7 +3,6 @@ function aStar(start, end){
 
     this.open_list = [];
     
-    this.min_f_score_index;
     this.start = start;
     this.end = end;
 
@@ -11,15 +10,10 @@ function aStar(start, end){
     this.g_score = {};
     this.previous = {};
 
-    this.hasVisited = new Array(NCOLS*NROWS); // A boolean array keeping track of what nodes that are visited
-
     this.g_score[[this.start.x ,this.start.y]] = 0;
     this.f_score[[this.start.x ,this.start.y]] = heuristic(this.start, this.end);
 
     this.open_list.push(this.start);
-    this.min_f_score_index = 0;
-
-    this.hasVisited[cellToIndex(this.start.x, this.start.y)] = true;
 
     this.step = function(){
 
@@ -28,54 +22,109 @@ function aStar(start, end){
         }
 
         current = this.open_list.pop() // Find element with lowest fScore
-        if(current.x == this.end.x && current.y == this.end.y){
+        if(this.compare(current, this.end)){
             // Complete!
             this.open_list.push(current); // push final step back
-            return this.end;
+            return current;
         }
 
         var ns = current.neighbours;
         for(var n = 0; n < ns.length; n++){
             var neighbour = ns[n];
            
-            var tentative_g_score = this.g_score[[current.x, current.y]] + distance(current, neighbour); // Distance from start to neighbouring node
-        
-            var old_g_score = this.g_score[[neighbour.x, neighbour.y]] == undefined ? Infinity : this.g_score[[neighbour.x, neighbour.y]]
-            if(tentative_g_score < old_g_score){
+            var tentative_g_score = this.gScore(current) + distance(current, neighbour); // Distance from start to neighbouring node
+
+            if(tentative_g_score < this.gScore(neighbour)){
                 this.previous[[neighbour.x, neighbour.y]] = current;
                 this.g_score[[neighbour.x, neighbour.y]] = tentative_g_score;
-                this.f_score[[neighbour.x, neighbour.y]] = this.g_score[[neighbour.x, neighbour.y]] + heuristic(neighbour, this.end);
+                this.f_score[[neighbour.x, neighbour.y]] = this.gScore(neighbour) + heuristic(neighbour, this.end);
 
-                var index = cellToIndex(neighbour.x, neighbour.y);
-                if(this.hasVisited[index] != true){
-                    this.hasVisited[index] = true;
-                    this.open_list = this.insertSortedFScore(neighbour, this.open_list);
+                if(!this.inOpenList(neighbour)){
+                    this.insertBinary(neighbour);
                 }
             }
         }
         return this.open_list[this.open_list.length -1]; // return node with lowest fScore
     }
 
-    this.insertSortedFScore = function(node, list){
-        for(var i = 0; i < list.length; i++){
-
-            if(this.f_score[[list[i].x, list[i].y]] < this.f_score[[node.x, node.y]]){
-                list.splice(i, 0, node);
-                return list;
+    this.inOpenList = function(node){
+        // Binary search
+        var L = 0;
+        var R = this.open_list.length-1;
+    
+        while(L <= R){
+            var m = int((L + R)/2);
+    
+            if(this.fScore(this.open_list[m]) > this.fScore(node)){
+                L = m +1;
+            }else if(this.fScore(this.open_list[m]) < this.fScore(node)){
+                R = m -1;
+            }else{
+                return this.compare(this.open_list[m], node);
             }
         }
-        list.push(node);
-        return list;
+        return false;
+    }
+
+    this.insertBinary = function(node){
+
+        // If open set is empty
+        if(this.open_list.length == 0){
+            this.open_list.push(node);
+            return;
+        }
+
+        var L = 0;
+        var R = this.open_list.length-1;
+    
+        var m = 0;
+        while(L < R){
+            m = int((L + R)/2);
+            if(this.fScore(node) <= this.fScore(this.open_list[m])){
+                L = m +1;
+            }else{
+                R = m;
+            }
+        }
+        var a = this.fScore(this.open_list[L]);
+        var b = this.fScore(node);
+        var index = a > b ? L+1 : L;
+    
+        this.open_list.splice(index, 0, node);
+        return;
+    }
+
+    this.gScore = function(node){
+        return this.g_score[[node.x, node.y]] == undefined ? Infinity : this.g_score[[node.x, node.y]];
+    }
+
+    this.fScore = function(node){
+        return this.f_score[[node.x, node.y]] == undefined ? Infinity : this.f_score[[node.x, node.y]];
+    }
+
+    this.compare = function(n1, n2){
+        return n1.x == n2.x && n1.y == n2.y;
+    }
+
+    this.debug = function(list){
+        for(var i = 0; i < list.length; i++){
+            console.log(this.fScore(list[i]));
+        }
+        console.log();
     }
 }
 
-
-function cellToIndex(x,y){
-    return x + y*NROWS;
-}
+// function linearSearch(list, value){
+//     for(var i = 0; i < list.length; i++){
+//         if(list[i].x == value.x && list[i].y == value.y){
+//             return i;
+//         }
+//     }
+//     return undefined;
+// }
 
 function distance(from, to){
-    return 1;
+    return pythagoras(from, to);
 }
 
 function heuristic(n1, n2){
