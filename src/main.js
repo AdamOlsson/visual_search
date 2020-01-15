@@ -44,6 +44,23 @@ function draw(){
     }
 
     drawEllipse([node.x, node.y], CELL_WIDTH, color(146,220,247));
-
+    
     counter += 1;
 }
+
+// function drawNodes(node){
+//     var WHITE = [0,0,0,255]
+
+//     drawEllipse([node.x, node.y], CELL_WIDTH, color(146,220,247));
+
+//     for(var i = 0; i < node.neighbours.length; i++){
+//         var n = node.neighbours[i];
+//         var p_coord = cellToCoordinate([n.x, n.y], {'type':'tuple'});
+
+//         var c = get(p_coord[0], p_coord[1]);
+
+//         if(compareArrays(c,WHITE)){
+//             drawEllipse([node.x, node.y], CELL_WIDTH, color(255,0,100));
+//         }
+//     }
+// }
