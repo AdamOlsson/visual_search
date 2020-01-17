@@ -1,0 +1,29 @@
+@charset "UTF-8";
+
+.topnav {
+    margin-bottom: 10px;
+}
+
+.control {
+    /* width: 200px; */
+} 
+
+
+.control ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+
+    /* flexbox params*/
+    display: flex;
+    flex-direction: column;
+}
+
+.control li {
+    display: inherit; /* for some reason li does not want to inherit ul display flex*/
+    justify-content: center;
+}
+
+.control button {
+
+}
